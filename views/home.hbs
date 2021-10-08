@@ -23,7 +23,7 @@
     knownNames = new Set()
     refreshHome = () => {
         knownNames.clear()
-        fetch('http://localhost:8080/getRoom')
+        fetch('https://jvoprogramming-chat-room.herokuapp.com/getRoom')
             .then(res => res.json())
             .then(data => {
                 roomList.innerHTML = ""

@@ -39,7 +39,7 @@ Messages:
     var currRoomName = roomID.getAttribute("value");
     var roomChat
     refreshChat = () => {
-        fetch('http://localhost:8080/getRoom')
+        fetch('https://jvoprogramming-chat-room.herokuapp.com/getRoom')
             .then(res => res.json())
             .then(data => {
                 for(let i = 0; i < data.length && !roomFound; i++){
