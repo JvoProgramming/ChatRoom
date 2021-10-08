@@ -14,7 +14,7 @@ const homeHandler = require("./controllers/home.js");
 const roomHandler = require("./controllers/room.js");
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,8 +32,6 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
 
-// If you choose not to use handlebars as template engine, you can safely delete the following part and use your own way to render content
-// view engine setup
 app.engine(
   "hbs",
   hbs({
@@ -45,11 +43,7 @@ app.engine(
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
-// set up stylesheets route
-
-// TODO: Add server side code
-
-// Create controller handlers to handle requests at each endpoint
+//controller handlers to handle requests at each endpoint
 app.post("/create", function (req, res) {
   const newRoom = new Room({
     name: req.body.roomName,
@@ -106,8 +100,6 @@ app.get("/getRoom", function (req, res) {
 app.get("/", homeHandler.getHome);
 app.get("/:roomName", roomHandler.getRoom);
 
-// NOTE: This is the sample server.js code we provided, feel free to change the structures
-
-app.listen(port || 8080, () =>
+app.listen(port, () =>
   console.log(`Server listening on http://localhost:${port}`)
 );
