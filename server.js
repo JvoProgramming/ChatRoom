@@ -7,6 +7,7 @@ const config = require("config");
 const path = require("path");
 const Room = require("./models/Rooms");
 const nameGen = require("./util/roomIdGenerator.js");
+require("dotenv").config();
 
 // import handlers
 const homeHandler = require("./controllers/home.js");
