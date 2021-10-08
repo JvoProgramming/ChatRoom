@@ -68,26 +68,30 @@ app.post("/createRandom", function (req, res) {
 
 app.post("/sendMessage", function (req, res) {
   console.log(req.body);
-  Room.findOneAndUpdate(
-    { name: req.body.roomID },
-    {
-      $push: {
-        messages:
-          new Date().toISOString() +
-          " | " +
-          req.body.userID +
-          ": " +
-          req.body.message,
+  if (req.body.userID != null) {
+    Room.findOneAndUpdate(
+      { name: req.body.roomID },
+      {
+        $push: {
+          messages:
+            new Date().toISOString() +
+            " | " +
+            req.body.userID +
+            ": " +
+            req.body.message,
+        },
       },
-    },
-    function (error, success) {
-      if (error) {
-        console.log(error);
-      } else {
-        //
+      function (error, success) {
+        if (error) {
+          console.log(error);
+        } else {
+          //
+        }
       }
-    }
-  );
+    );
+  } else {
+    console.log("User not signed in");
+  }
 });
 
 app.get("/getRoom", function (req, res) {
