@@ -1,0 +1,70 @@
+<h1> Room </h1>
+<p>This is a demo of chatroom page</p>
+<p>
+    The room you are visiting is {{ roomName }}
+</p>
+
+Messages:
+<div id="chatBox" style="background-color: 	#D3D3D3; height: 250px; overflow: scroll; margin: 10px">
+    <ul id="messageList"></ul>
+</div>
+
+<form action="/sendMessage" method="POST">
+    <input type="text" id="messageBox" name="message" onkeyup="prependName()" placeholder="Enter Message Here"/>
+    <input type="hidden" id="roomID" name="roomID" value={{roomName}}>
+    <input type="hidden" id="userID" name="userID" value="">
+    <input type="submit" value="Send Message"/>
+</form>
+
+<input type="checkbox" id="chatCheckBox" onclick="userChecked()">
+<label for="chatCheckBox"> Enable auto-scroll </label><br>
+
+<body onload="getUserName()"></body>
+
+<script>
+    var person
+    var scrollCheck = false
+
+    function prependName(){
+        userID.setAttribute("value", person) 
+    }
+
+    function getUserName(){
+        prependName()
+        person = prompt("Please enter your name", "User Name");
+        return person
+    }
+
+    var roomFound = false;
+    var currRoomName = roomID.getAttribute("value");
+    var roomChat
+    refreshChat = () => {
+        fetch('http://localhost:8080/getRoom')
+            .then(res => res.json())
+            .then(data => {
+                for(let i = 0; i < data.length && !roomFound; i++){
+                        if(data[i].name == currRoomName)
+                            roomChat = data[i].messages
+                }
+                messageList.innerHTML = ""
+                for(let i = 0; i < roomChat.length; i++){
+                    messageList.innerHTML += "<li><b>" + roomChat[i] +"</b></li>"
+                }
+        }).catch(err => console.error(err));
+    }
+    
+    function autoScroll(){
+        if(scrollCheck){
+            var messageBody = document.querySelector('#chatBox');
+            messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+        }
+    }
+
+    function userChecked(){
+        scrollCheck = !scrollCheck
+    }
+
+    refreshChat();
+    window.setInterval(refreshChat, 1000)
+    window.setInterval(autoScroll, 100)
+</script>

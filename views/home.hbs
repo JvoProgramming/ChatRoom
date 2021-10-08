@@ -1,0 +1,40 @@
+<h1> Home </h1>
+<p>This is the {{ title }} page</p>
+{{#if isAvailable}}
+<div id="roomBox" style="background-color: 	#D3D3D3; height: 250px; overflow: scroll; margin: 10px">
+    <ul id="roomList">
+        {{#each rooms}}
+            <li><a href={{this.name}}> {{this.name}} </a></li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+<form action="/create" method="POST">
+    <input type="text" name="roomName" placeholder="Enter Room Name"/>
+    <input type="submit" value="Create Room"/>
+</form>
+
+<form action="/createRandom" method="POST">
+    <input type="submit" name="roomName" value="Create Random Room"/>
+</form>
+
+<script>
+    knownNames = new Set()
+    refreshHome = () => {
+        knownNames.clear()
+        fetch('http://localhost:8080/getRoom')
+            .then(res => res.json())
+            .then(data => {
+                roomList.innerHTML = ""
+                for(let i = 0; i < data.length; i++){
+                    if(!knownNames.has(data[i].name)){
+                        knownNames.add(data[i].name)
+                        roomList.innerHTML += "<li><a href=\"" + data[i].name + "\">" + data[i].name + "</a></li>"
+                    }
+                }
+        }).catch(err => console.error(err));
+    }
+    refreshHome();
+    window.setInterval(refreshHome, 5000)
+</script>
