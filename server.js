@@ -108,6 +108,6 @@ app.get("/:roomName", roomHandler.getRoom);
 
 // NOTE: This is the sample server.js code we provided, feel free to change the structures
 
-app.listen(port, () =>
+app.listen(port || 8080, () =>
   console.log(`Server listening on http://localhost:${port}`)
 );
